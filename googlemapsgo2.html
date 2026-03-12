@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Page Title</title>
+</head>
+<body>
+
+
+
+
+
+
+<!-- This script loads Tailwind CSS for styling. -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- This meta tag is crucial for responsive design on all devices. -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<div class="flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 bg-gray-100 min-h-screen font-sans">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 sm:p-8 border border-gray-200">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 text-center">Find Your Location on Map</h2>
+
+        <div class="mb-6">
+            <label for="addressInput" class="block text-gray-700 text-sm font-semibold mb-2">Enter Address:</label>
+            <input
+                type="text"
+                id="addressInput"
+                placeholder="e.g., 1600 Amphitheatre Parkway, Mountain View, CA"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800"
+                aria-label="Address input field"
+            >
+        </div>
+
+        <button
+            onclick="openGoogleMaps()"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
+            aria-label="Open address in Google Maps"
+        >
+            Open on Google Maps
+        </button>
+
+        <div id="messageBox" class="mt-4 p-3 text-sm text-red-700 bg-red-100 rounded-lg hidden" role="alert">
+            <!-- Error messages will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    /**
+     * @file This script handles opening a Google Maps link based on user input.
+     * @author Gemini
+     */
+
+    /**
+     * Displays a message in the message box.
+     * @param {string} message - The message to display.
+     * @param {string} type - The type of message ('error' or 'info').
+     */
+    function showMessageBox(message, type) {
+        const messageBox = document.getElementById('messageBox');
+        messageBox.textContent = message;
+        messageBox.classList.remove('hidden'); // Make sure it's visible
+
+        // Apply styling based on message type
+        if (type === 'error') {
+            messageBox.classList.remove('bg-green-100', 'text-green-700');
+            messageBox.classList.add('bg-red-100', 'text-red-700');
+        } else { // Default to info/success styling
+            messageBox.classList.remove('bg-red-100', 'text-red-700');
+            messageBox.classList.add('bg-green-100', 'text-green-700');
+        }
+    }
+
+    /**
+     * Hides the message box.
+     */
+    function hideMessageBox() {
+        const messageBox = document.getElementById('messageBox');
+        messageBox.classList.add('hidden');
+        messageBox.textContent = ''; // Clear content
+    }
+
+    /**
+     * Opens Google Maps with the address entered by the user.
+     * If the input field is empty, an error message is displayed.
+     */
+    function openGoogleMaps() {
+        const addressInput = document.getElementById('addressInput');
+        const address = addressInput.value.trim(); // Get the value and remove leading/trailing whitespace
+
+        if (address === '') {
+            showMessageBox('Please enter an address before searching.', 'error');
+            return; // Stop the function if input is empty
+        }
+
+        hideMessageBox(); // Hide any previous messages
+
+        // Encode the address to make it URL-safe
+        const encodedAddress = encodeURIComponent(address);
+
+        // Construct the Google Maps URL
+        // Using the 'search' endpoint with 'api=1' is the recommended way for simple address searches.
+        const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
+
+        // Open the URL in a new tab
+        window.open(googleMapsUrl, '_blank');
+    }
+</script>
+
+
+</body>
+</html>
+
